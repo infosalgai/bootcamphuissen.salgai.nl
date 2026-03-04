@@ -104,7 +104,7 @@ export default function BootcampHuissen() {
           Word Fit Samen Sterk
         </h1>
         <div
-          className={`absolute left-5 sm:left-8 md:left-12 lg:left-16 top-[14%] sm:top-[16%] z-10 transition-all duration-1000 ease-out ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
+          className={`absolute left-5 sm:left-8 md:left-12 lg:left-16 top-[20%] sm:top-[18%] md:top-[16%] z-10 transition-all duration-1000 ease-out ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           aria-hidden
         >
           <span className="font-display font-bold text-white uppercase tracking-tighter block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
@@ -115,7 +115,7 @@ export default function BootcampHuissen() {
           </span>
         </div>
         <div
-          className={`absolute right-5 sm:right-8 md:right-12 lg:right-16 bottom-8 sm:bottom-10 md:bottom-12 pb-[env(safe-area-inset-bottom)] text-right z-10 transition-all duration-1000 ease-out delay-150 ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`absolute right-5 sm:right-8 md:right-12 lg:right-16 bottom-24 sm:bottom-20 md:bottom-12 pb-[env(safe-area-inset-bottom)] text-right z-10 transition-all duration-1000 ease-out delay-150 ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           aria-hidden
         >
           <span className="font-display font-bold text-white uppercase tracking-tighter block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
