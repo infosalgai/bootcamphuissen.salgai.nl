@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Users, Dumbbell, Award, Heart, ChevronRight, Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react"
+import { Users, Dumbbell, Award, Heart, Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react"
 
 export default function BootcampHuissen() {
   const [formData, setFormData] = useState({
@@ -14,59 +14,11 @@ export default function BootcampHuissen() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [heroVisible, setHeroVisible] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
-  const [typedText, setTypedText] = useState("")
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
-  const phrases = [
-    "Word Fit. Samen.",
-    "Train Hard. Met Plezier.",
-    "Jouw Beste Versie.",
-    "Sterker Elke Dag."
-  ]
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroVisible(true), 100)
     return () => clearTimeout(timer)
   }, [])
-
-  useEffect(() => {
-    if (!heroVisible) return
-    
-    const currentPhrase = phrases[currentPhraseIndex]
-    let currentIndex = 0
-    let isDeleting = false
-    let pauseTimeout: NodeJS.Timeout
-    
-    const typeInterval = setInterval(() => {
-      if (!isDeleting) {
-        // Typing
-        if (currentIndex <= currentPhrase.length) {
-          setTypedText(currentPhrase.slice(0, currentIndex))
-          currentIndex++
-        } else {
-          // Pause before deleting
-          clearInterval(typeInterval)
-          pauseTimeout = setTimeout(() => {
-            isDeleting = true
-            const deleteInterval = setInterval(() => {
-              if (currentIndex > 0) {
-                currentIndex--
-                setTypedText(currentPhrase.slice(0, currentIndex))
-              } else {
-                clearInterval(deleteInterval)
-                // Move to next phrase
-                setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length)
-              }
-            }, 40)
-          }, 2000)
-        }
-      }
-    }, 80)
-    
-    return () => {
-      clearInterval(typeInterval)
-      clearTimeout(pauseTimeout)
-    }
-  }, [heroVisible, currentPhraseIndex])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,10 +40,6 @@ export default function BootcampHuissen() {
     document.getElementById("aanmelden")?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const scrollToTrainingen = () => {
-    document.getElementById("trainingen")?.scrollIntoView({ behavior: "smooth" })
-  }
-
   return (
     <main className="min-h-screen">
       {/* Sticky Header */}
@@ -102,13 +50,16 @@ export default function BootcampHuissen() {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="flex items-center">
+        <div className="relative max-w-[1200px] mx-auto px-6 flex items-center justify-end min-h-[3.25rem] md:min-h-[3.5rem]">
+          {/* Logo – gecentreerd in het midden */}
+          <a
+            href="#"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center"
+          >
             <img
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-bootcamp-huissen-O_ZszHca%20%281%29-mihRgTL1wYWMBSPZ3rAOT4FQnrQmkP.png"
               alt="Bootcamp Huissen"
-              className={`h-10 md:h-12 w-auto transition-all duration-300 ${
+              className={`h-7 md:h-9 w-auto transition-all duration-300 ${
                 headerScrolled ? "" : "brightness-0 invert"
               }`}
             />
@@ -128,8 +79,8 @@ export default function BootcampHuissen() {
         </div>
       </header>
 
-      {/* Hero Section with Video Background */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Hero Section – Club Pellikaan style: split headline + single CTA */}
+      <section className="relative min-h-[100svh] overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0 z-0">
           <video
@@ -140,99 +91,93 @@ export default function BootcampHuissen() {
             className="absolute inset-0 w-full h-full object-cover"
           >
             <source
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Hoe%20het%20is%20om%20bij%20Bootcamp%20Huissen%20-%20De%20loods%20te%20trainenSchrijf%20je%20snel%20in%20op%20www.bootcamphuisse-ZYV3IiBvtjMN9Ij7cDNs8RXCft3tfL.mp4"
+              src="/videos/deloods-huissen-hero-video.mp4"
               type="video/mp4"
             />
           </video>
-          {/* Dark Overlay */}
+          {/* Dark overlay for readability */}
           <div className="absolute inset-0 bg-black/55" />
         </div>
-        
-        {/* Hero Content with Fade-in Animation */}
-        <div className={`relative z-10 text-center px-6 max-w-4xl mx-auto transition-all duration-1000 ease-out ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h1 className="font-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white uppercase tracking-tighter mb-6 min-h-[1.2em] whitespace-nowrap">
-            {typedText}
-            <span className="animate-pulse">|</span>
-          </h1>
-          <p className={`text-lg md:text-xl text-white/90 font-light max-w-2xl mx-auto mb-10 leading-relaxed transition-all duration-1000 ease-out delay-200 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            Sport mee met de gezelligste sportcommunity van Huissen.
-          </p>
-          <div className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 ease-out delay-500 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <button
-              onClick={scrollToForm}
-              className="bg-primary hover:bg-primary/90 text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300"
-            >
-              Gratis Proefles
-            </button>
-            <button
-              onClick={scrollToTrainingen}
-              className="border-2 border-white text-white px-10 py-4 text-sm font-bold uppercase tracking-widest hover:bg-white hover:text-secondary transition-all duration-300"
-            >
-              Bekijk Trainingen
-            </button>
-          </div>
+
+        {/* Split headline (single h1, two positioned blocks) */}
+        <h1 className="relative z-10 font-display font-bold text-white uppercase tracking-tighter sr-only">
+          Word Fit Samen Sterk
+        </h1>
+        <div
+          className={`absolute left-5 sm:left-8 md:left-12 lg:left-16 top-[14%] sm:top-[16%] z-10 transition-all duration-1000 ease-out ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
+          aria-hidden
+        >
+          <span className="font-display font-bold text-white uppercase tracking-tighter block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
+            Word
+          </span>
+          <span className="font-display font-bold text-white uppercase tracking-tighter block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
+            Fit
+          </span>
+        </div>
+        <div
+          className={`absolute right-5 sm:right-8 md:right-12 lg:right-16 bottom-8 sm:bottom-10 md:bottom-12 pb-[env(safe-area-inset-bottom)] text-right z-10 transition-all duration-1000 ease-out delay-150 ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          aria-hidden
+        >
+          <span className="font-display font-bold text-white uppercase tracking-tighter block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
+            Samen
+          </span>
+          <span className="font-display font-bold text-white uppercase tracking-tighter block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
+            Sterk
+          </span>
         </div>
 
-        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-all duration-1000 ease-out delay-700 ${heroVisible ? 'opacity-100' : 'opacity-0'}`}>
-          <ChevronRight className="w-8 h-8 text-white/70 rotate-90 animate-bounce" />
+        {/* Primary CTA – bottom-left */}
+        <div
+          className={`absolute left-5 sm:left-8 md:left-12 lg:left-16 bottom-8 sm:bottom-10 md:bottom-12 pb-[env(safe-area-inset-bottom)] z-10 transition-all duration-1000 ease-out delay-300 ${heroVisible ? "opacity-100" : "opacity-0"}`}
+        >
+          <button
+            onClick={scrollToForm}
+            className="bg-primary hover:bg-primary/90 text-white px-8 py-4 sm:px-10 sm:py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300"
+          >
+            Gratis proefles
+          </button>
         </div>
       </section>
 
-      {/* Why Bootcamp Huissen */}
-      <section className="py-24 md:py-32 bg-white">
+      {/* Block 2: Feature split – text left, image right (Version A) */}
+      <section className="py-20 md:py-28 lg:py-32 bg-[#f5f0eb]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-secondary uppercase tracking-tight text-center mb-6">
-            Meer Dan Alleen Sporten
-          </h2>
-          
-          {/* Social Proof Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 mb-16">
-            <div className="text-center">
-              <span className="font-display text-4xl md:text-5xl font-bold text-primary">15+</span>
-              <p className="text-muted-foreground text-sm uppercase tracking-wide mt-1">Jaar Ervaring</p>
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left: copy */}
+            <div className="space-y-6 md:space-y-8">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-secondary uppercase tracking-tight">
+                MEER DAN ALLEEN SPORTEN
+              </h2>
+              <div className="space-y-5 text-secondary/90 text-base md:text-lg leading-relaxed">
+                <p>
+                  Bootcamp Huissen is al 15 jaar een begrip in Huissen.
+                  Je traint bij ons niet alleen voor resultaat, maar vooral omdat het gezellig is en je met plezier blijft komen.
+                </p>
+                <p>
+                  Van <strong>BOOTCAMP</strong> tot <strong>CROSSFITNESS</strong>, van <strong>HRX WORKOUTS</strong> tot <strong>PERSONAL TRAINING</strong>:
+                  altijd afwisselend, altijd uitdagend, altijd samen.
+                </p>
+              </div>
+              <p className="font-semibold text-secondary pt-2">
+                15 jaar in Huissen 🥇 • HRX Workouts 🏋️‍♀️ • Crossfitness • Bootcamp • Personal Training
+              </p>
+              <div>
+                <button
+                  onClick={scrollToForm}
+                  className="bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300"
+                >
+                  GRATIS PROEFLES
+                </button>
+              </div>
             </div>
-            <div className="hidden md:block w-px h-12 bg-border" />
-            <div className="text-center">
-              <span className="font-display text-4xl md:text-5xl font-bold text-primary">500+</span>
-              <p className="text-muted-foreground text-sm uppercase tracking-wide mt-1">Tevreden Sporters</p>
+            {/* Right: image */}
+            <div className="relative aspect-[4/3] md:aspect-square rounded-lg overflow-hidden bg-secondary/10">
+              <img
+                src="/images/hero-bootcamp.jpg"
+                alt="Bootcamp Huissen training"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
-            <div className="hidden md:block w-px h-12 bg-border" />
-            <div className="text-center">
-              <span className="font-display text-4xl md:text-5xl font-bold text-primary">20+</span>
-              <p className="text-muted-foreground text-sm uppercase tracking-wide mt-1">Trainingen Per Week</p>
-            </div>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            <BenefitCard
-              icon={<Users className="w-8 h-8" />}
-              title="Community & Motivatie"
-              description="Train samen met gelijkgestemden. De groep motiveert je om het beste uit jezelf te halen."
-            />
-            <BenefitCard
-              icon={<Dumbbell className="w-8 h-8" />}
-              title="Full Body Workouts"
-              description="Gevarieerde trainingen die je hele lichaam aanpakken. Kracht, conditie en flexibiliteit."
-            />
-            <BenefitCard
-              icon={<Award className="w-8 h-8" />}
-              title="Professionele Begeleiding"
-              description="Gecertificeerde trainers die je helpen met de juiste techniek en aanmoedigen."
-            />
-            <BenefitCard
-              icon={<Heart className="w-8 h-8" />}
-              title="Resultaat Met Plezier"
-              description="Effectieve workouts die leuk blijven. Geen saaie routines, wel zichtbare resultaten."
-            />
-          </div>
-          
-          <div className="text-center mt-16">
-            <button
-              onClick={scrollToForm}
-              className="bg-primary hover:bg-primary/90 text-white px-10 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300"
-            >
-              Gratis Proefles Aanvragen
-            </button>
           </div>
         </div>
       </section>
