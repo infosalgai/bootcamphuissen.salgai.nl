@@ -3,13 +3,18 @@
 import { useState, useEffect, useRef } from "react"
 import { Users, Dumbbell, Award, Heart, Mail, Phone, MapPin, Instagram, Facebook, Menu, X } from "lucide-react"
 
+const splitWords = (text: string): [string, string] => {
+  const firstSpace = text.indexOf(" ")
+  if (firstSpace === -1) return [text, ""]
+  return [text.slice(0, firstSpace), text.slice(firstSpace + 1)]
+}
+
 export default function BootcampHuissen() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     interests: [] as string[],
-    comment: "",
     consent: false
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -17,12 +22,46 @@ export default function BootcampHuissen() {
   const [heroVisible, setHeroVisible] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [leftHeroText, setLeftHeroText] = useState("")
+  const [rightHeroText, setRightHeroText] = useState("")
   const heroRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroVisible(true), 100)
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    if (!heroVisible) {
+      setLeftHeroText("")
+      setRightHeroText("")
+      return
+    }
+
+    const leftFull = "Word Fit"
+    const rightFull = "Samen sterk"
+    const timeouts: number[] = []
+
+    const typePhrase = (
+      full: string,
+      setter: React.Dispatch<React.SetStateAction<string>>,
+      startDelay: number
+    ) => {
+      for (let i = 0; i <= full.length; i++) {
+        const timeoutId = window.setTimeout(() => {
+          setter(full.slice(0, i))
+        }, startDelay + i * 80)
+        timeouts.push(timeoutId)
+      }
+    }
+
+    typePhrase(leftFull, setLeftHeroText, 0)
+    typePhrase(rightFull, setRightHeroText, 600)
+
+    return () => {
+      timeouts.forEach((id) => window.clearTimeout(id))
+    }
+  }, [heroVisible])
 
   useEffect(() => {
     const heroElement = heroRef.current
@@ -81,7 +120,6 @@ export default function BootcampHuissen() {
           email: formData.email,
           phone: formData.phone,
           interests: formData.interests,
-          comment: formData.comment,
           consent: formData.consent,
           source: "bootcamphuissen.nl",
           page: typeof window !== "undefined" ? window.location.href : undefined,
@@ -106,6 +144,9 @@ export default function BootcampHuissen() {
     setMenuOpen(false)
   }
 
+  const [leftFirstWord, leftSecondWord] = splitWords(leftHeroText)
+  const [rightFirstWord, rightSecondWord] = splitWords(rightHeroText)
+
   return (
     <main className="min-h-screen">
       {/* Sticky Header */}
@@ -121,11 +162,11 @@ export default function BootcampHuissen() {
             headerScrolled ? "grid-cols-[auto_1fr_auto]" : "grid-cols-[auto_1fr]"
           } md:grid-cols-[auto_1fr_auto]`}
         >
-          {/* Hamburger – wit icoon (invert wanneer header transparant) */}
-          <div className="flex items-center">
+          {/* Hamburger – links tegen viewport aan */}
+          <div className="flex items-center xl:ml-[calc(-50vw+576px)]">
             <button
               onClick={() => setMenuOpen(true)}
-              className={`p-2 -ml-2 transition-colors ${
+              className={`p-2 -ml-6 transition-colors ${
                 headerScrolled ? "text-secondary hover:text-primary" : "text-white hover:text-white/80"
               }`}
               aria-label="Menu openen"
@@ -258,10 +299,10 @@ export default function BootcampHuissen() {
           aria-hidden
         >
           <span className="font-sans font-semibold text-white tracking-tight uppercase block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
-            WORD
+            {leftFirstWord}
           </span>
           <span className="font-sans font-semibold text-white tracking-tight uppercase block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
-            FIT
+            {leftSecondWord}
           </span>
         </div>
         <div
@@ -269,10 +310,10 @@ export default function BootcampHuissen() {
           aria-hidden
         >
           <span className="font-sans font-semibold text-white tracking-tight uppercase block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
-            SAMEN
+            {rightFirstWord}
           </span>
           <span className="font-sans font-semibold text-white tracking-tight uppercase block text-[clamp(2rem,5vw+1.5rem,4.5rem)] md:text-[clamp(2.5rem,6vw+1rem,5.5rem)] leading-[1.05]">
-            STERK
+            {rightSecondWord}
           </span>
         </div>
 
@@ -351,8 +392,7 @@ export default function BootcampHuissen() {
           <div className="grid md:grid-cols-3 gap-8">
             <TrainingCard
               title="Bootcamp Outside"
-              subtitle="Outdoor full body workouts in groepsverband."
-              tagline="Kracht. Conditie. Variatie."
+              subtitle="Outdoor trainen in groepsverband."
               benefits={["Buiten", "Alle niveaus", "Frisse lucht"]}
               imageSrc="https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=800"
               imageAlt="Groep die buiten samen sport tijdens een bootcamptraining"
@@ -361,7 +401,6 @@ export default function BootcampHuissen() {
             <TrainingCard
               title="Workouts Inside"
               subtitle="Small group training in onze loods."
-              tagline="Functional fitness met kettlebells en halters."
               benefits={["Max 12 deelnemers", "Droog trainen", "Kettlebells"]}
               imageSrc="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=800"
               imageAlt="Binnen training met kettlebells in een loods"
@@ -370,7 +409,6 @@ export default function BootcampHuissen() {
             <TrainingCard
               title="Personal Training"
               subtitle="1-op-1 begeleiding."
-              tagline="Maximale focus op jouw doelen."
               benefits={["1-op-1", "Op maat", "Flexibel"]}
               imageSrc="https://images.pexels.com/photos/3253501/pexels-photo-3253501.jpeg?auto=compress&cs=tinysrgb&w=800"
               imageAlt="Trainer die één-op-één een sporter begeleidt"
@@ -574,18 +612,6 @@ export default function BootcampHuissen() {
                   })}
                 </div>
               </div>
-              <div className="space-y-3">
-                <label className="block text-sm text-secondary/80">
-                  Opmerking <span className="text-muted-foreground">(optioneel)</span>
-                  <textarea
-                    value={formData.comment}
-                    onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-                    rows={4}
-                    className="mt-2 w-full bg-white border border-border text-foreground placeholder:text-muted-foreground px-4 py-3 focus:outline-none focus:border-primary transition-colors resize-y"
-                    placeholder="Bijvoorbeeld: welke dag/tijd past vaak goed, of heb je blessures waar we rekening mee moeten houden?"
-                  />
-                </label>
-              </div>
               <div className="flex items-start gap-3">
                 <input
                   id="contact-consent"
@@ -614,24 +640,28 @@ export default function BootcampHuissen() {
       {/* Footer */}
       <footer className="py-12 bg-[#f5f0eb]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="text-center md:text-left">
-              <h3 className="font-sans text-xl font-semibold text-secondary tracking-tight uppercase mb-2">
-                Bootcamp Huissen
+          <div className="grid gap-10 md:grid-cols-3 items-start">
+            {/* Contactgegevens */}
+            <div>
+              <h3 className="font-sans text-sm font-semibold tracking-[0.18em] uppercase text-secondary/70 mb-3">
+                Contactgegevens
               </h3>
-              <div className="flex flex-col md:flex-row items-center gap-4 text-secondary/70 text-sm">
-                <span className="flex items-center gap-2">
+              <p className="font-sans text-xl font-semibold text-secondary tracking-tight mb-2">
+                Bootcamp Huissen
+              </p>
+              <div className="space-y-2 text-secondary/80 text-sm">
+                <p className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
-                  Huissen
-                </span>
-                <span className="flex items-center gap-2">
+                  <span>Huissen</span>
+                </p>
+                <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  info@bootcamphuissen.nl
-                </span>
-                <span className="flex items-center gap-2">
+                  <span>info@bootcamphuissen.nl</span>
+                </p>
+                <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  06-12345678
-                </span>
+                  <span>06-12345678</span>
+                </p>
               </div>
               <div className="mt-4 text-secondary/70 text-xs md:text-sm space-y-1">
                 <p>KvK nr: 74103393</p>
@@ -646,38 +676,88 @@ export default function BootcampHuissen() {
                 </p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-4">
-              <a
-                href="https://www.facebook.com/groups/bootcamphuissen/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-secondary/70 hover:text-primary transition-colors"
-                aria-label="Facebook groep Bootcamp Huissen"
-              >
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a
-                href="https://www.instagram.com/bootcamphuissen/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-secondary/70 hover:text-primary transition-colors"
-                aria-label="Instagram Bootcamp Huissen"
-              >
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a
-                href="https://www.tiktok.com/@marwanvh"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-secondary/70 hover:text-primary transition-colors"
-                aria-label="TikTok Bootcamp Huissen"
-              >
-                <TikTokIcon className="w-5 h-5" />
-              </a>
+
+            {/* Links */}
+            <div>
+              <h3 className="font-sans text-sm font-semibold tracking-[0.18em] uppercase text-secondary/70 mb-3">
+                Links
+              </h3>
+              <nav className="space-y-2 text-sm text-secondary/80">
+                <a
+                  href="#over-ons"
+                  onClick={(e) => { e.preventDefault(); scrollToSection("over-ons") }}
+                  className="block hover:text-primary transition-colors"
+                >
+                  Over ons
+                </a>
+                <a
+                  href="#trainingen"
+                  onClick={(e) => { e.preventDefault(); scrollToSection("trainingen") }}
+                  className="block hover:text-primary transition-colors"
+                >
+                  Onze trainingen
+                </a>
+                <a
+                  href="#tarieven"
+                  onClick={(e) => { e.preventDefault(); scrollToSection("tarieven") }}
+                  className="block hover:text-primary transition-colors"
+                >
+                  Tarieven
+                </a>
+                <a
+                  href="#zo-start-je"
+                  onClick={(e) => { e.preventDefault(); scrollToSection("zo-start-je") }}
+                  className="block hover:text-primary transition-colors"
+                >
+                  Zo start je
+                </a>
+                <a
+                  href="#aanmelden"
+                  onClick={(e) => { e.preventDefault(); scrollToForm() }}
+                  className="block hover:text-primary transition-colors"
+                >
+                  Gratis proefles aanvragen
+                </a>
+              </nav>
+            </div>
+
+            {/* Social */}
+            <div>
+              <h3 className="font-sans text-sm font-semibold tracking-[0.18em] uppercase text-secondary/70 mb-3">
+                Social
+              </h3>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://www.facebook.com/groups/bootcamphuissen/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary/70 hover:text-primary transition-colors"
+                  aria-label="Facebook groep Bootcamp Huissen"
+                >
+                  <Facebook className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://www.instagram.com/bootcamphuissen/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary/70 hover:text-primary transition-colors"
+                  aria-label="Instagram Bootcamp Huissen"
+                >
+                  <Instagram className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://www.tiktok.com/@marwanvh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary/70 hover:text-primary transition-colors"
+                  aria-label="TikTok Bootcamp Huissen"
+                >
+                  <TikTokIcon className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </div>
-          
+
           <div className="border-t border-border mt-8 pt-8 text-center">
             <p className="text-muted-foreground text-sm">
               &copy; {new Date().getFullYear()} Bootcamp Huissen. Alle rechten voorbehouden.
@@ -724,7 +804,6 @@ function BenefitCard({ icon, title, description }: { icon: React.ReactNode; titl
 function TrainingCard({ 
   title, 
   subtitle, 
-  tagline, 
   benefits, 
   imageSrc,
   imageAlt,
@@ -732,7 +811,6 @@ function TrainingCard({
 }: { 
   title: string
   subtitle: string
-  tagline: string
   benefits: string[]
   imageSrc: string
   imageAlt: string
@@ -747,17 +825,18 @@ function TrainingCard({
           className="w-full h-full object-cover"
           loading="lazy"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-4">
+          <h3 className="font-sans text-2xl font-semibold text-white tracking-tight uppercase">
+            {title}
+          </h3>
+          <p className="text-white/90 text-sm mt-1">
+            {subtitle}
+          </p>
+        </div>
       </div>
       <div className="p-6 flex flex-col flex-1">
-<h3 className="font-sans text-2xl font-semibold text-secondary tracking-tight uppercase mb-1">
-        {title}
-        </h3>
-        <p className="text-muted-foreground mb-1">{subtitle}</p>
-        <p className="text-primary font-semibold text-sm uppercase tracking-wide mb-5">
-          {tagline}
-        </p>
-
-        <ul className="list-disc list-inside text-foreground/80 text-sm mb-6 flex-grow space-y-1.5">
+        <ul className="list-disc list-inside text-foreground/80 text-sm mb-6 mt-2 flex-grow space-y-1.5">
           {benefits.map((benefit, index) => (
             <li key={index}>{benefit}</li>
           ))}
