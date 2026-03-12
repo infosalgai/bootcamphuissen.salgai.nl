@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Poppins, Oswald, Inter } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
@@ -8,18 +8,6 @@ const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-sans',
-});
-
-const oswald = Oswald({ 
-  subsets: ["latin"],
-  variable: '--font-oswald',
-  weight: ['400', '500', '600', '700']
-});
-
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: '--font-inter',
-  weight: ['300', '400', '500', '600']
 });
 
 export const metadata: Metadata = {
@@ -51,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="nl" className={`${poppins.variable} ${oswald.variable} ${inter.variable}`}>
+    <html lang="nl" className={poppins.variable}>
       <body className="font-sans antialiased">
         {children}
         <Analytics />
