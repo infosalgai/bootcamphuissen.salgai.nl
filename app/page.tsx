@@ -337,18 +337,18 @@ export default function BootcampHuissen() {
             {/* Left: copy */}
             <div className="space-y-6 md:space-y-8">
               <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase">
-                Een plek waar je erbij hoort
+                Join de sportcommunity van Huissen
               </h2>
               <div className="space-y-5 text-secondary/90 text-base md:text-lg leading-relaxed">
                 <p>
-                  Of je nu net begint of al jaren sport: bij Bootcamp Huissen ben je welkom. We trainen samen, lachen samen en helpen elkaar vooruit.
+                  Al 15 jaar is Bootcamp Huissen de plek waar mensen uit Huissen en omgeving samen sporten in het hart van de stad.
                 </p>
                 <p>
-                  Geen hiërarchie, geen oordeel. Gewoon een fijne groep mensen die fit wil worden en elkaar een duwtje in de rug geeft. Jij past erbij.
+                  Je traint in kleine groepen, met persoonlijke aandacht, vaste gezichten en een open sfeer waarin nieuwe leden zich snel thuis voelen.
                 </p>
               </div>
               <p className="font-semibold text-secondary pt-2">
-                Al 15 jaar de plek in Huissen waar nieuwe gezichten meteen meedoen.
+                Samen fitter worden, midden in het centrum van Huissen.
               </p>
               <div>
                 <button
@@ -391,17 +391,25 @@ export default function BootcampHuissen() {
 
           <div className="grid md:grid-cols-3 gap-8">
             <TrainingCard
-              title="Bootcamp Outside"
-              subtitle="Outdoor trainen in groepsverband."
-              benefits={["Buiten", "Alle niveaus", "Frisse lucht"]}
-              imageSrc="https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=800"
-              imageAlt="Groep die buiten samen sport tijdens een bootcamptraining"
+              title="Bootcamp"
+              subtitle="Outdoor full body workouts in groepsverband."
+              benefits={[
+                "Full body buitenworkout",
+                "Met uitdagende objecten",
+                "Professionele begeleiding"
+              ]}
+              imageSrc="/bootcamp-outside.webp"
+              imageAlt="Deelnemers aan Bootcamp Outside die samen met zandzakken trainen in de buitenlucht"
               onCTAClick={scrollToForm}
             />
             <TrainingCard
-              title="Workouts Inside"
+              title="De Loods"
               subtitle="Small group training in onze loods."
-              benefits={["Max 12 deelnemers", "Droog trainen", "Kettlebells"]}
+              benefits={[
+                "Full body in kleine groep",
+                "Kettlebells & halters",
+                "Voor elk niveau"
+              ]}
               imageSrc="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=800"
               imageAlt="Binnen training met kettlebells in een loods"
               onCTAClick={scrollToForm}
