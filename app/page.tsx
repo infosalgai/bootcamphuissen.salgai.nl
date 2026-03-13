@@ -95,8 +95,28 @@ export default function BootcampHuissen() {
       }
     }
 
-    autoplayVideo(heroVideoRef.current)
-    autoplayVideo(aboutVideoRef.current)
+    const tryAutoplay = () => {
+      autoplayVideo(heroVideoRef.current)
+      autoplayVideo(aboutVideoRef.current)
+    }
+
+    // Eerste poging direct bij laden
+    tryAutoplay()
+
+    // Fallback: bij eerste tik/klik alsnog proberen (voor iOS / strenge mobiele browsers)
+    const handleUserInteraction = () => {
+      tryAutoplay()
+      window.removeEventListener("touchstart", handleUserInteraction)
+      window.removeEventListener("click", handleUserInteraction)
+    }
+
+    window.addEventListener("touchstart", handleUserInteraction)
+    window.addEventListener("click", handleUserInteraction)
+
+    return () => {
+      window.removeEventListener("touchstart", handleUserInteraction)
+      window.removeEventListener("click", handleUserInteraction)
+    }
   }, [])
 
   useEffect(() => {
