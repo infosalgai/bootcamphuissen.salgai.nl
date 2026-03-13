@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Users, Dumbbell, Award, Heart, Mail, Phone, MapPin, Instagram, Facebook, Menu, X } from "lucide-react"
+import React, { useState, useEffect, useRef } from "react"
+import { Users, Dumbbell, Heart, Mail, Phone, MapPin, Instagram, Facebook, Menu, X } from "lucide-react"
 
 const splitWords = (text: string): [string, string] => {
   const firstSpace = text.indexOf(" ")
@@ -25,6 +25,8 @@ export default function BootcampHuissen() {
   const [leftHeroText, setLeftHeroText] = useState("")
   const [rightHeroText, setRightHeroText] = useState("")
   const heroRef = useRef<HTMLElement | null>(null)
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null)
+  const aboutVideoRef = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroVisible(true), 100)
@@ -80,6 +82,21 @@ export default function BootcampHuissen() {
       if (heroElement) observer.unobserve(heroElement)
       observer.disconnect()
     }
+  }, [])
+
+  useEffect(() => {
+    const autoplayVideo = (video: HTMLVideoElement | null) => {
+      if (!video) return
+      const playPromise = video.play()
+      if (playPromise && typeof (playPromise as Promise<void>).catch === "function") {
+        ;(playPromise as Promise<void>).catch(() => {
+          // Sommige mobiele browsers blokkeren autoplay alsnog; in dat geval doen we niets.
+        })
+      }
+    }
+
+    autoplayVideo(heroVideoRef.current)
+    autoplayVideo(aboutVideoRef.current)
   }, [])
 
   useEffect(() => {
@@ -236,16 +253,16 @@ export default function BootcampHuissen() {
               headerScrolled ? "flex" : "hidden"
             } md:flex`}
           >
-            <button
-              onClick={scrollToForm}
-              className={`rounded-[5px] bg-primary hover:bg-primary/90 text-white text-xs font-bold uppercase tracking-widest transition-all duration-300 px-6 flex items-center h-full min-h-[3.25rem] md:min-h-[3.5rem] ${
-                headerScrolled
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 -translate-y-2 pointer-events-none"
-              }`}
-            >
-              Gratis Proefles
-            </button>
+              <button
+                onClick={scrollToForm}
+                className={`rounded-[5px] bg-primary hover:bg-primary/90 text-white text-xs font-semibold uppercase tracking-widest transition-all duration-300 px-6 flex items-center h-full min-h-[3.25rem] md:min-h-[3.5rem] ${
+                  headerScrolled
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-2 pointer-events-none"
+                }`}
+              >
+                Gratis proefles
+              </button>
           </div>
         </div>
       </header>
@@ -288,11 +305,11 @@ export default function BootcampHuissen() {
               Tarieven
             </a>
             <a
-              href="#zo-start-je"
-              onClick={(e) => { e.preventDefault(); scrollToSection("zo-start-je") }}
+              href="#waarom-hier-trainen"
+              onClick={(e) => { e.preventDefault(); scrollToSection("waarom-hier-trainen") }}
               className="font-sans text-2xl md:text-3xl font-bold text-secondary uppercase tracking-tight py-3 border-b border-border/50 hover:text-primary transition-colors"
             >
-              Zo start je
+              Waarom hier trainen
             </a>
             <a
               href="#aanmelden"
@@ -310,10 +327,12 @@ export default function BootcampHuissen() {
         {/* Video Background */}
         <div className="absolute inset-0 z-0">
           <video
+            ref={heroVideoRef}
             autoPlay
             muted
             loop
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover"
           >
             <source
@@ -359,9 +378,9 @@ export default function BootcampHuissen() {
           <button
             onClick={scrollToForm}
             className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 sm:px-10 sm:py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300"
-          >
-            Gratis proefles
-          </button>
+            >
+              Gratis proefles
+            </button>
         </div>
       </section>
 
@@ -386,22 +405,24 @@ export default function BootcampHuissen() {
                 Samen fitter worden, midden in het centrum van Huissen.
               </p>
               <div>
-                <button
-                  onClick={scrollToForm}
-                  className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-bold tracking-widest transition-all duration-300"
-                >
-                  Gratis proefles
-                </button>
+              <button
+                onClick={scrollToForm}
+                className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-semibold uppercase tracking-widest transition-all duration-300"
+              >
+                Gratis proefles
+              </button>
               </div>
             </div>
             {/* Right: video */}
             <div className="relative aspect-[4/3] md:aspect-square rounded-lg overflow-hidden bg-secondary/10">
               <video
+                ref={aboutVideoRef}
                 className="absolute inset-0 w-full h-full object-cover"
                 autoPlay
                 loop
                 muted
                 playsInline
+                preload="auto"
               >
                 <source
                   src="/videos/Bootcamp Huissen X @upwarddames2 🏑De dames van Upward 2 hadden een duwtje in de rug nodig richt.mp4"
@@ -466,7 +487,7 @@ export default function BootcampHuissen() {
       </section>
 
       {/* Block 4: Waarom jij hier wilt trainen */}
-      <section id="zo-start-je" className="pt-12 pb-24 md:pt-16 md:pb-32 bg-[#f5f0eb]">
+      <section id="waarom-hier-trainen" className="pt-12 pb-24 md:pt-16 md:pb-32 bg-[#f5f0eb]">
         <div className="max-w-[1200px] mx-auto px-6">
           <p className="font-sans text-xs sm:text-sm font-semibold tracking-[0.2em] text-secondary/70 uppercase text-center mb-12">
             Waarom jij hier wilt trainen
@@ -505,7 +526,7 @@ export default function BootcampHuissen() {
       <section id="aanmelden" className="py-24 md:py-32 bg-[#f5f0eb]">
         <div className="max-w-[600px] mx-auto px-6">
           <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase text-center mb-4">
-            Klaar Om Te Starten?
+            Klaar om te starten?
           </h2>
           <p className="text-secondary/80 text-center mb-12">
             Vraag je gratis proefles aan en ontdek waarom Bootcamp Huissen anders is.
@@ -690,7 +711,7 @@ export default function BootcampHuissen() {
               onClick={scrollToForm}
               className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all duration-300"
             >
-              Gratis Proefles Aanvragen
+              Gratis proefles aanvragen
             </button>
           </div>
         </div>
@@ -782,11 +803,11 @@ export default function BootcampHuissen() {
                   Tarieven
                 </a>
                 <a
-                  href="#zo-start-je"
-                  onClick={(e) => { e.preventDefault(); scrollToSection("zo-start-je") }}
+                  href="#waarom-hier-trainen"
+                  onClick={(e) => { e.preventDefault(); scrollToSection("waarom-hier-trainen") }}
                   className="block hover:text-primary transition-colors"
                 >
-                  Zo start je
+                  Waarom hier trainen
                 </a>
                 <a
                   href="#aanmelden"
@@ -923,38 +944,10 @@ function TrainingCard({
           onClick={onCTAClick}
           className="rounded-[5px] w-full bg-primary hover:bg-primary/90 text-white px-6 py-3 text-sm font-semibold uppercase tracking-wider transition-all duration-300"
         >
-          Gratis Proefles
+          Gratis proefles
         </button>
       </div>
     </article>
-  )
-}
-
-function TestimonialCard({ quote, name, role }: { quote: string; name: string; role: string }) {
-  return (
-    <div className="border border-border p-8">
-      <blockquote className="text-foreground leading-relaxed mb-6">
-        &ldquo;{quote}&rdquo;
-      </blockquote>
-      <div>
-        <p className="font-semibold text-secondary">{name}</p>
-        <p className="text-sm text-muted-foreground">{role}</p>
-      </div>
-    </div>
-  )
-}
-
-function StepCard({ number, title, description }: { number: string; title: string; description: string }) {
-  return (
-    <div className="text-center">
-      <span className="font-sans text-6xl font-semibold text-primary tracking-tight">{number}</span>
-      <h3 className="font-sans text-xl font-semibold text-secondary tracking-tight uppercase mt-4 mb-3">
-        {title}
-      </h3>
-      <p className="text-secondary/80 leading-relaxed">
-        {description}
-      </p>
-    </div>
   )
 }
 
