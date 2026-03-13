@@ -85,8 +85,17 @@ export default function BootcampHuissen() {
   }, [])
 
   useEffect(() => {
-    const autoplayVideo = (video: HTMLVideoElement | null) => {
+    const prepareAndPlay = (video: HTMLVideoElement | null) => {
       if (!video) return
+
+      // Zorg dat alle relevante attributes/props voor mobiel goed staan
+      video.muted = true
+      video.defaultMuted = true
+      video.loop = true
+      video.playsInline = true
+      video.setAttribute("muted", "")
+      video.setAttribute("playsinline", "")
+
       const playPromise = video.play()
       if (playPromise && typeof (playPromise as Promise<void>).catch === "function") {
         ;(playPromise as Promise<void>).catch(() => {
@@ -96,12 +105,19 @@ export default function BootcampHuissen() {
     }
 
     const tryAutoplay = () => {
-      autoplayVideo(heroVideoRef.current)
-      autoplayVideo(aboutVideoRef.current)
+      prepareAndPlay(heroVideoRef.current)
+      prepareAndPlay(aboutVideoRef.current)
     }
 
     // Eerste poging direct bij laden
     tryAutoplay()
+
+    // Nog een poging wanneer het tabblad weer zichtbaar wordt (bv. na terugkeren naar de site)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        tryAutoplay()
+      }
+    }
 
     // Fallback: bij eerste tik/klik alsnog proberen (voor iOS / strenge mobiele browsers)
     const handleUserInteraction = () => {
@@ -112,10 +128,12 @@ export default function BootcampHuissen() {
 
     window.addEventListener("touchstart", handleUserInteraction)
     window.addEventListener("click", handleUserInteraction)
+    document.addEventListener("visibilitychange", handleVisibilityChange)
 
     return () => {
       window.removeEventListener("touchstart", handleUserInteraction)
       window.removeEventListener("click", handleUserInteraction)
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
     }
   }, [])
 
