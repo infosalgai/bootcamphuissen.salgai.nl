@@ -38,8 +38,8 @@ export default function BootcampHuissen() {
       return
     }
 
-    const leftFull = "Word Fit"
-    const rightFull = "Samen sterk"
+    const leftFull = "Samen fitter"
+    const rightFull = "Samen sterker"
     const timeouts: number[] = []
 
     const typePhrase = (
@@ -146,6 +146,41 @@ export default function BootcampHuissen() {
 
   const [leftFirstWord, leftSecondWord] = splitWords(leftHeroText)
   const [rightFirstWord, rightSecondWord] = splitWords(rightHeroText)
+
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
+
+  const faqItems = [
+    {
+      question: "Wat is een gratis proefles?",
+      answer:
+        "Je schrijft je in voor één training naar keuze om Bootcamp Huissen te ervaren. De les is geheel vrijblijvend: na afloop beslis je zelf of je vaker wilt komen.",
+    },
+    {
+      question: "Voor wie is dit geschikt?",
+      answer:
+        "Onze trainingen zijn voor mannen en vrouwen van verschillende leeftijden die fitter en sterker willen worden. Je traint altijd op je eigen niveau, met aanpassingen waar nodig.",
+    },
+    {
+      question: "Moet ik al fit zijn om te beginnen?",
+      answer:
+        "Nee, absoluut niet. Juist als je al een tijd niet gesport hebt ben je welkom. We bouwen rustig op en houden rekening met jouw startniveau.",
+    },
+    {
+      question: "Sporten jullie alleen buiten?",
+      answer:
+        "Nee. We geven zowel buitenlessen (Bootcamp) als trainingen in onze eigen loods. Afhankelijk van je abonnement kun je één of beide vormen combineren.",
+    },
+    {
+      question: "Wat als ik een blessure of klacht heb?",
+      answer:
+        "Geef dit altijd even aan bij de trainer voor de les. We denken met je mee en passen oefeningen aan, zodat je veilig kunt meedoen of rustig kunt opbouwen.",
+    },
+    {
+      question: "Wat neem ik mee naar mijn eerste training?",
+      answer:
+        "Draag sportkleding waarin je vrij kunt bewegen, sportschoenen en neem een flesje water mee. Bij buitentrainingen is het fijn als je je kleding afstemt op het weer.",
+    },
+  ]
 
   return (
     <main className="min-h-screen">
@@ -292,7 +327,7 @@ export default function BootcampHuissen() {
 
         {/* Split headline (single h1, two positioned blocks) */}
         <h1 className="relative z-10 font-sans font-semibold text-white tracking-tight uppercase sr-only">
-          WORD FIT SAMEN STERK
+          WORD FITTER SAMEN STERKER
         </h1>
         <div
           className={`absolute left-5 sm:left-8 md:left-12 lg:left-16 top-[20%] sm:top-[18%] md:top-[16%] z-10 transition-all duration-1000 ease-out ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
@@ -337,7 +372,7 @@ export default function BootcampHuissen() {
             {/* Left: copy */}
             <div className="space-y-6 md:space-y-8">
               <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase">
-                Join de sportcommunity van Huissen
+                Join dé sportcommunity van Huissen
               </h2>
               <div className="space-y-5 text-secondary/90 text-base md:text-lg leading-relaxed">
                 <p>
@@ -407,78 +442,51 @@ export default function BootcampHuissen() {
               subtitle="Small group training in onze loods."
               benefits={[
                 "Full body in kleine groep",
-                "Kettlebells & halters",
+                "Kettlebells, halters en meer",
                 "Voor elk niveau"
               ]}
-              imageSrc="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=800"
-              imageAlt="Binnen training met kettlebells in een loods"
+              imageSrc="/deloods.webp"
+              imageAlt="Deelnemers die in De Loods samen krachttraining doen met halters en materiaal"
               onCTAClick={scrollToForm}
             />
             <TrainingCard
               title="Personal Training"
               subtitle="1-op-1 begeleiding."
-              benefits={["1-op-1", "Op maat", "Flexibel"]}
-              imageSrc="https://images.pexels.com/photos/3253501/pexels-photo-3253501.jpeg?auto=compress&cs=tinysrgb&w=800"
-              imageAlt="Trainer die één-op-één een sporter begeleidt"
+              benefits={[
+                "1-op-1 op jouw niveau",
+                "Samen naar jouw doelen",
+                "Extra duwtje in de rug"
+              ]}
+              imageSrc="/pt-deloods.webp"
+              imageAlt="Persoonlijke training met halter in De Loods"
               onCTAClick={scrollToForm}
             />
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-24 md:py-32 bg-white">
+      {/* Block 4: Waarom jij hier wilt trainen */}
+      <section id="zo-start-je" className="pt-12 pb-24 md:pt-16 md:pb-32 bg-[#f5f0eb]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase text-center mb-16">
-            Wat Leden Écht Zeggen
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <TestimonialCard
-              quote="Ik kwam binnen met nul conditie en best wat spanning. Na een paar weken kende ik ieders naam en voelde ik me geen seconde meer 'de nieuwe'. De trainers zien echt wat jij nodig hebt."
-              name="Marieke (32) uit Huissen"
-              role="Traint 2x per week · Bootcamp Outside"
-            />
-            <TestimonialCard
-              quote="Ik dacht altijd dat bootcamp alleen voor super fitte mensen was. Nu sta ik zelf drie keer per week in de loods en mis ik het als ik een keer niet kan. De groep sleept je erdoorheen."
-              name="Peter (45) uit Arnhem"
-              role="Komt 3x per week · Workouts Inside"
-            />
-            <TestimonialCard
-              quote="Door de persoonlijke aandacht durfde ik eindelijk weer te beginnen na een blessure. We bouwen rustig op, maar ik merk elke maand verschil. Het voelt meer als samen trainen dan als 'sportschool'."
-              name="Linda (38) uit Huissen"
-              role="Combinatie van Bootcamp Outside & Personal Training"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Block 4: Waarom je hier lid wilt worden */}
-      <section id="zo-start-je" className="py-24 md:py-32 bg-[#f5f0eb]">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase text-center mb-6">
-            Waarom Jij Hier Wilt Trainen
-          </h2>
-          <p className="text-secondary/80 text-center max-w-2xl mx-auto mb-14 text-base md:text-lg">
-            Je wilt je weer fit voelen, meer energie hebben en je hoofd leegmaken. Bij Bootcamp Huissen doe je dat
-            in een groep waar je gezien wordt, op jouw niveau traint en iedere week een stapje vooruit gaat.
+          <p className="font-sans text-xs sm:text-sm font-semibold tracking-[0.2em] text-secondary/70 uppercase text-center mb-12">
+            Waarom jij hier wilt trainen
           </p>
-          
+
           <div className="grid md:grid-cols-3 gap-12 md:gap-8">
             <BenefitCard
               icon={<Users className="w-12 h-12" />}
-              title="Je doet het nooit alleen"
-              description="Geen sportschool waar je anoniem rondloopt, maar een vaste groep en trainers die je bij naam kennen en je motiveren als je het even zwaar hebt."
+              title="Altijd samen, nooit alleen"
+              description="Je sport in een hechte groep met vaste trainers die je bij naam kennen en je elke training vooruit duwen."
             />
             <BenefitCard
               icon={<Heart className="w-12 h-12" />}
-              title="Geschikt voor elk niveau"
-              description="Je hoeft niet fit te zijn om te starten. We laten je op jouw niveau instappen en passen oefeningen aan zodat jij veilig en met een goed gevoel mee kunt doen."
+              title="Instappen op jouw niveau"
+              description="Of je net begint of al een tijd traint: we schalen elke oefening, zodat jij veilig en met vertrouwen mee kunt doen."
             />
             <BenefitCard
               icon={<Dumbbell className="w-12 h-12" />}
-              title="Merkbaar meer energie"
-              description="Kracht, conditie en een leeg hoofd in één training. Binnen een paar weken voel je je sterker, slaap je beter en heb je meer energie in je dagelijkse leven."
+              title="Snel resultaat dat je voelt"
+              description="In één training werk je aan kracht, conditie en een leeg hoofd. Na een paar weken merk je meer energie, betere slaap en meer zelfvertrouwen."
             />
           </div>
 
@@ -488,55 +496,6 @@ export default function BootcampHuissen() {
               className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all duration-300"
             >
               Ja, ik wil dit proberen
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="tarieven" className="py-24 md:py-32 bg-white">
-        <div className="max-w-[800px] mx-auto px-6">
-          <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase text-center mb-4">
-            Tarieven
-          </h2>
-          <p className="text-center text-secondary/80 text-base md:text-lg mb-12">
-            Geen inschrijfgeld, geen verborgen kosten. Kies wat bij je past — je eerste proefles is gratis en zonder verplichting.
-          </p>
-          
-          <div className="space-y-4 mb-8">
-            <PricingRow
-              label="1x per week"
-              price="€41,95"
-              period="/maand"
-              description="Eén vaste training per week: volle aandacht van de groep en trainers. Ideaal om rustig op te bouwen of als je weinig tijd hebt."
-            />
-            <PricingRow
-              label="2x per week"
-              price="€52,95"
-              period="/maand"
-              description="De keuze van de meeste leden. Twee vaste momenten per week voor zichtbaar resultaat — sneller sterker en fitter."
-              badge="Meest gekozen"
-            />
-            <PricingRow
-              label="Onbeperkt"
-              price="€63,95"
-              period="/maand"
-              description="Train zo vaak als je wilt: Bootcamp Outside én Workouts Inside. Maximale flexibiliteit en de laagste prijs per training."
-              featured
-              badge="Beste waarde"
-            />
-          </div>
-          
-          <p className="text-center text-muted-foreground mb-10">
-            Eerste proefles altijd gratis · Geen verplichtingen
-          </p>
-          
-          <div className="text-center">
-            <button
-              onClick={scrollToForm}
-              className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all duration-300"
-            >
-              Gratis Proefles Aanvragen
             </button>
           </div>
         </div>
@@ -642,6 +601,116 @@ export default function BootcampHuissen() {
               </button>
             </form>
           )}
+        </div>
+      </section>
+
+      <section className="bg-[#f5f0eb] pb-24 md:pb-32">
+        <div className="max-w-[900px] mx-auto px-6">
+          <div className="bg-white border border-border p-6 sm:p-8 shadow-sm">
+            <h3 className="font-sans text-xl sm:text-2xl font-semibold text-secondary tracking-tight uppercase text-center mb-6">
+              Veelgestelde vragen
+            </h3>
+            <div className="space-y-3 text-sm text-secondary/80">
+              {faqItems.map((item, index) => {
+                const isOpen = openFaqIndex === index
+                return (
+                  <div
+                    key={item.question}
+                    className="border border-border/60"
+                  >
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenFaqIndex((prev) => (prev === index ? null : index))
+                      }
+                      className="w-full flex items-center justify-between gap-4 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                    >
+                      <span className="font-semibold text-secondary">
+                        {item.question}
+                      </span>
+                      <span className="text-primary text-xl leading-none">
+                        {isOpen ? "−" : "+"}
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-0">
+                        <p className="text-muted-foreground">
+                          {item.answer}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing – nu onderaan de pagina */}
+      <section id="tarieven" className="py-24 md:py-32 bg-white">
+        <div className="max-w-[800px] mx-auto px-6">
+          <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-semibold text-secondary tracking-tight uppercase text-center mb-4">
+            Tarieven
+          </h2>
+          <p className="text-center text-secondary/80 text-base md:text-lg mb-12">
+            Geen inschrijfgeld, geen verborgen kosten. Kies wat bij je past — je eerste proefles is gratis en zonder verplichting.
+          </p>
+          
+          <div className="space-y-4 mb-8">
+            <PricingRow
+              label="1x per week"
+              price="€41,95"
+              period="/maand"
+              description="Eén vaste training per week: volle aandacht van de groep en trainers. Ideaal om rustig op te bouwen of als je weinig tijd hebt."
+            />
+            <PricingRow
+              label="2x per week"
+              price="€52,95"
+              period="/maand"
+              description="De keuze van de meeste leden. Twee vaste momenten per week voor zichtbaar resultaat — sneller sterker en fitter."
+              badge="Meest gekozen"
+            />
+            <PricingRow
+              label="Onbeperkt"
+              price="€63,95"
+              period="/maand"
+              description="Train zo vaak als je wilt: Bootcamp Outside én Workouts Inside. Maximale flexibiliteit en de laagste prijs per training."
+              featured
+              badge="Beste waarde"
+            />
+          </div>
+          
+          <p className="text-center text-muted-foreground mb-10">
+            Eerste proefles altijd gratis · Geen verplichtingen
+          </p>
+          
+          <div className="text-center">
+            <button
+              onClick={scrollToForm}
+              className="rounded-[5px] bg-primary hover:bg-primary/90 text-white px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all duration-300"
+            >
+              Gratis Proefles Aanvragen
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Extra CTA onder tarieven */}
+      <section className="py-16 bg-primary">
+        <div className="max-w-[1200px] mx-auto px-6 text-center text-white">
+          <h2 className="font-sans text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight uppercase mb-4">
+            Nog twijfel? Plan je gratis proefles
+          </h2>
+          <p className="max-w-2xl mx-auto mb-8 text-base md:text-lg text-white/90">
+            Ervaar zelf hoe het is om bij Bootcamp Huissen te trainen. Vul je gegevens in en we nemen contact met je op om je proefles in te plannen.
+          </p>
+          <button
+            onClick={scrollToForm}
+            className="rounded-[5px] bg-white text-primary hover:bg-white/90 px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all duration-300"
+          >
+            Ja, ik wil een gratis proefles
+          </button>
         </div>
       </section>
 
